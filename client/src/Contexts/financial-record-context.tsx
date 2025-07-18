@@ -30,16 +30,23 @@ export const FinancialRecordsProvider = ({
   const [records, setRecords] = useState<FinancialRecord[]>([]);
   const { user } = useUser();
 
+  // ✅ Use environment variable
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
   const fetchRecords = async () => {
     if (!user) return;
-    const response = await fetch(
-      `http://localhost:3001/financial-records/getAllByUserID/${user.id}`
-    );
-
-    if (response.ok) {
-      const records = await response.json();
-      console.log(records);
-      setRecords(records);
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/financial-records/getAllByUserID/${user.id}`
+      );
+      if (response.ok) {
+        const records = await response.json();
+        setRecords(records);
+      } else {
+        console.error("Failed to fetch records");
+      }
+    } catch (error) {
+      console.error("Error fetching records:", error);
     }
   };
 
@@ -48,66 +55,69 @@ export const FinancialRecordsProvider = ({
   }, [user]);
 
   const addRecord = async (record: FinancialRecord) => {
-    const response = await fetch("http://localhost:3001/financial-records", {
-      method: "POST",
-      body: JSON.stringify(record),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
     try {
+      const response = await fetch(`${API_BASE_URL}/financial-records`, {
+        method: "POST",
+        body: JSON.stringify(record),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
       if (response.ok) {
         const newRecord = await response.json();
         setRecords((prev) => [...prev, newRecord]);
+      } else {
+        console.error("Failed to add record");
       }
-    } catch (err) {}
+    } catch (err) {
+      console.error("Error adding record:", err);
+    }
   };
 
   const updateRecord = async (id: string, newRecord: FinancialRecord) => {
-    const response = await fetch(
-      `http://localhost:3001/financial-records/${id}`,
-      {
+    try {
+      const response = await fetch(`${API_BASE_URL}/financial-records/${id}`, {
         method: "PUT",
         body: JSON.stringify(newRecord),
         headers: {
           "Content-Type": "application/json",
         },
-      }
-    );
+      });
 
-    try {
       if (response.ok) {
-        const newRecord = await response.json();
+        const updatedRecord = await response.json();
         setRecords((prev) =>
-          prev.map((record) => {
-            if (record._id === id) {
-              return newRecord;
-            } else {
-              return record;
-            }
-          })
+          prev.map((record) =>
+            record._id === id ? updatedRecord : record
+          )
         );
+      } else {
+        console.error("Failed to update record");
       }
-    } catch (err) {}
+    } catch (err) {
+      console.error("Error updating record:", err);
+    }
   };
 
   const deleteRecord = async (id: string) => {
     setRecords((prev) => prev.filter((record) => record._id !== id));
-  
-    const response = await fetch(
-      `http://localhost:3001/financial-records/${id}`,
-      {
-        method: "DELETE",
+
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/financial-records/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (!response.ok) {
+        console.error("Failed to delete record from server");
       }
-    );
-  
-    if (!response.ok) {
-      // Optional: Revert state or show error
-      console.error("Failed to delete on server");
+    } catch (err) {
+      console.error("Error deleting record:", err);
     }
   };
-  
 
   return (
     <FinancialRecordsContext.Provider
