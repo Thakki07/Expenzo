@@ -20,7 +20,7 @@ const getAllByUserID: RequestHandler = async (req, res): Promise<void> => {
       return;
     }
 
-    const records = await FinancialRecordModel.find({ userId: userId });
+    const records = await FinancialRecordModel.find({ userId });
     if (records.length === 0) {
       res.status(404).json({ message: "No records found for the user." });
       return;
@@ -35,17 +35,38 @@ const getAllByUserID: RequestHandler = async (req, res): Promise<void> => {
 const createRecord: RequestHandler = async (req, res): Promise<void> => {
   try {
     const newRecordBody = req.body;
+    console.log("Received payload:", newRecordBody);
+
     if (!newRecordBody || Object.keys(newRecordBody).length === 0) {
       res.status(400).json({ error: "Request body is required" });
+      return;
+    }
+
+    const { userId, date, description, amount, category, paymentMethod } = newRecordBody;
+
+    const missingFields = [];
+    if (!userId) missingFields.push("userId");
+    if (!date) missingFields.push("date");
+    if (!description) missingFields.push("description");
+    if (!amount) missingFields.push("amount");
+    if (!category) missingFields.push("category");
+    if (!paymentMethod) missingFields.push("paymentMethod");
+
+    if (missingFields.length > 0) {
+      res.status(400).json({ error: `Missing required fields: ${missingFields.join(", ")}` });
       return;
     }
 
     const newRecord = new FinancialRecordModel(newRecordBody);
     const savedRecord = await newRecord.save();
     res.status(201).json(savedRecord);
-  } catch (err) {
-    console.error("Error in createRecord:", err);
-    res.status(500).json({ error: "Internal server error" });
+  } catch (err: any) {
+    console.error("Error in createRecord:", err.message);
+    if (err.name === "ValidationError") {
+      res.status(400).json({ error: err.message });
+    } else {
+      res.status(500).json({ error: "Internal server error" });
+    }
   }
 };
 
@@ -63,11 +84,7 @@ const updateRecord: RequestHandler = async (req, res): Promise<void> => {
       return;
     }
 
-    const record = await FinancialRecordModel.findByIdAndUpdate(
-      id,
-      newRecordBody,
-      { new: true }
-    );
+    const record = await FinancialRecordModel.findByIdAndUpdate(id, newRecordBody, { new: true });
 
     if (!record) {
       res.status(404).json({ error: "Record not found" });
@@ -94,6 +111,7 @@ const deleteRecord: RequestHandler = async (req, res): Promise<void> => {
       res.status(404).json({ error: "Record not found" });
       return;
     }
+
     res.status(200).json({ message: "Record deleted successfully" });
   } catch (err) {
     console.error("Error in deleteRecord:", err);
