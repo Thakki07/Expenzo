@@ -12,7 +12,7 @@ function App() {
       <div className="app-container">
         <div className="navbar">
           <div className="navbar-left">
-            <img src="/expenzo-logo.png" alt="Logo" className="navbar-logo" />
+            <img src="/expenzo-img.png" alt="Loalago" className="navbar-logo" />
           </div>
           <div className="navbar-right">
             <Link to="/">Dashboard</Link>
