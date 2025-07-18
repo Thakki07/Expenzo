@@ -3,7 +3,7 @@ import {
   type FinancialRecord,
   useFinancialRecords,
 } from "../../Contexts/financial-record-context";
-import { useTable, type Column, type CellProps, type Row } from "react-table";
+import { useTable, type Column, type CellProps } from "react-table";
 
 interface EditableCellProps extends CellProps<FinancialRecord> {
   updateRecord: (rowIndex: number, columnId: string, value: any) => void;
@@ -133,6 +133,7 @@ export const FinancialRecordList = () => {
       columns,
       data: records,
     });
+
   return (
     <div className="table-container">
       <table {...getTableProps()} className="table">
@@ -140,13 +141,13 @@ export const FinancialRecordList = () => {
           {headerGroups.map((hg) => (
             <tr {...hg.getHeaderGroupProps()}>
               {hg.headers.map((column) => (
-                <th {...column.getHeaderProps()}> {column.render("Header")}</th>
+                <th {...column.getHeaderProps()}> {column.render("Header")} </th>
               ))}
             </tr>
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {rows.map((row, idx) => {
+          {rows.map((row) => {
             prepareRow(row);
             return (
               <tr {...row.getRowProps()}>
