@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { Dashboard } from "./pages/dashboard";
 import { Auth } from "./pages/auth";
 import { FinancialRecordsProvider } from "./Contexts/financial-record-context";
-import { SignedIn, UserButton } from "@clerk/clerk-react";
+import { SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
 import { dark } from "@clerk/themes";
 
 function App() {
@@ -16,6 +16,11 @@ function App() {
           </div>
           <div className="navbar-right">
             <Link to="/">Dashboard</Link>
+
+            <SignedOut>
+              <Link to="/auth">Sign Up</Link>
+            </SignedOut>
+
             <SignedIn>
               <UserButton appearance={{ baseTheme: dark }} />
             </SignedIn>
@@ -26,11 +31,22 @@ function App() {
           <Route
             path="/"
             element={
-              <FinancialRecordsProvider>
-                <Dashboard />
-              </FinancialRecordsProvider>
+              <>
+                <SignedIn>
+                  <FinancialRecordsProvider>
+                    <Dashboard />
+                  </FinancialRecordsProvider>
+                </SignedIn>
+
+                <SignedOut>
+                  <div style={{ padding: "2rem", textAlign: "center", fontSize: "100px" }}>
+                    Please Sign Up to access the service.
+                  </div>
+                </SignedOut>
+              </>
             }
           />
+
           <Route path="/auth" element={<Auth />} />
         </Routes>
       </div>
