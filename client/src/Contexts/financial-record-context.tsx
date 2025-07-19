@@ -11,12 +11,9 @@ export interface FinancialRecord {
   paymentMethod: string;
 }
 
-// 👇 Updated: omit userId from input
-type FinancialRecordInput = Omit<FinancialRecord, "userId">;
-
 interface FinancialRecordsContextType {
   records: FinancialRecord[];
-  addRecord: (record: FinancialRecordInput) => void;
+  addRecord: (record: FinancialRecord) => void;
   updateRecord: (id: string, newRecord: FinancialRecord) => void;
   deleteRecord: (id: string) => void;
 }
@@ -33,6 +30,7 @@ export const FinancialRecordsProvider = ({
   const [records, setRecords] = useState<FinancialRecord[]>([]);
   const { user } = useUser();
 
+  // ✅ Use environment variable
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   const fetchRecords = async () => {
@@ -56,18 +54,11 @@ export const FinancialRecordsProvider = ({
     fetchRecords();
   }, [user]);
 
-  const addRecord = async (record: FinancialRecordInput) => {
-    if (!user) return;
-
-    const recordWithUserId: FinancialRecord = {
-      ...record,
-      userId: user.id,
-    };
-
+  const addRecord = async (record: FinancialRecord) => {
     try {
       const response = await fetch(`${API_BASE_URL}/financial-records`, {
         method: "POST",
-        body: JSON.stringify(recordWithUserId),
+        body: JSON.stringify(record),
         headers: {
           "Content-Type": "application/json",
         },
@@ -97,7 +88,9 @@ export const FinancialRecordsProvider = ({
       if (response.ok) {
         const updatedRecord = await response.json();
         setRecords((prev) =>
-          prev.map((record) => (record._id === id ? updatedRecord : record))
+          prev.map((record) =>
+            record._id === id ? updatedRecord : record
+          )
         );
       } else {
         console.error("Failed to update record");
