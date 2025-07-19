@@ -5,7 +5,7 @@ import {
   SignUpButton,
 } from "@clerk/clerk-react";
 import { Navigate } from "react-router-dom";
-import "./Auth.css"; // <-- we'll define styles here
+import "./auth.css"; // <-- we'll define styles here
 
 export const Auth = () => {
   return (
