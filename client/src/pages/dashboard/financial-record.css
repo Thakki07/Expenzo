@@ -1,99 +1,140 @@
-/* Centered container for the app */
 .dashboard-container {
-  width: 80%;
+  width: 90%;
+  max-width: 1000px;
+  margin: 2rem auto;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
 }
 
-/* General styling for headers within the app */
+/* Headings */
 h1,
 h2 {
-  color: #2c3e50;
+  color: #ffffff;
   text-align: center;
+  background: linear-gradient(90deg, #00c6ff, #0072ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
 }
 
-/* Form and list container */
+/* Form containers */
 .form-container,
 .list-container {
-  margin-bottom: 20px;
+  margin-bottom: 2rem;
 }
 
-/* Common class for all buttons */
-.button {
-  background-color: #3498db;
-  color: #ffffff;
-  border: none;
-  padding: 8px 15px;
-  margin: 5px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-}
-
-.button:hover {
-  background-color: #2980b9;
-}
-.button-delete {
-  background-color: #343cdb;
-  color: #ffffff;
-  border: none;
-  padding: 8px 15px;
-  margin: 5px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-}
-
-.button-delete:hover {
-  background-color: #343cdb;
-}
-
-/* Common class for all input fields and selects */
+/* Input fields and selects */
 .input {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   margin-top: 5px;
   margin-bottom: 15px;
-  background-color: transparent;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  color: #3498db;
+  background-color: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  color: #05f1e1;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.3s ease;
 }
 
-/* Labels for better readability */
+.input:focus {
+  border-color: #00c6ff;
+  box-shadow: 0 0 10px rgba(0, 198, 255, 0.5);
+}
+.input option {
+  background-color: #1e2a38; /* dark background */
+  color: #05f1e1; /* matching text color */
+}
+
+/* Optional: make the dropdown smoother in supported browsers */
+select::-ms-expand {
+  display: none; /* Remove dropdown arrow in IE */
+}
+/* Labels */
 label {
   font-weight: 600;
   display: block;
   margin-bottom: 5px;
+  color: #ffffffcc;
 }
 
+/* Buttons */
+.button,
+.button-delete {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.button {
+  background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+  color: white;
+  box-shadow: 0 6px 15px rgba(0, 213, 255, 0.3);
+}
+
+.button:hover {
+  transform: scale(1.05);
+  background: linear-gradient(135deg, #3a7bd5, #00d2ff);
+}
+
+.button-delete {
+  background-color: #d9534f;
+  color: white;
+}
+
+.button-delete:hover {
+  background-color: #c9302c;
+}
+
+/* Table container */
 .table-container {
-  margin: 20px;
-  overflow-x: auto; /* Enables horizontal scrolling if the table is too wide */
+  overflow-x: auto;
+  border-radius: 12px;
 }
 
+/* Table styles */
 .table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  overflow: hidden;
 }
 
 .table th,
 .table td {
-  padding: 12px 15px;
-  border: 1px solid #ddd; /* Light grey border for cells */
+  padding: 14px 18px;
   text-align: left;
+  color: #ffffffdd;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .table th {
-  background-color: #3498db; /* Darker blue header background */
-  color: white;
-  font-size: 16px;
+  background: rgba(0, 198, 255, 0.2);
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 600;
 }
 
 .table tbody tr:nth-child(odd) {
-  background-color: #f2f2f2; /* Zebra striping for rows, light grey */
+  background-color: rgba(255, 255, 255, 0.025);
 }
 
 .table tbody tr:hover {
-  background-color: #e8f4f8; /* Light blue hover effect for rows */
+  background-color: rgba(0, 198, 255, 0.07);
+}
+.total-monthly{
+  color:rgb(95, 245, 245);
+  font-size:20px;
 }

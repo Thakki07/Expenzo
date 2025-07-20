@@ -39,8 +39,10 @@ function App() {
                 </SignedIn>
 
                 <SignedOut>
-                  <div style={{ padding: "2rem", textAlign: "center", fontSize: "100px" }}>
-                    Please Sign Up to access the service.
+                  <div className="signup-warning-container">
+                    <div className="signup-warning-box">
+                      <h1>Please Sign Up to Access the Service</h1>
+                    </div>
                   </div>
                 </SignedOut>
               </>
